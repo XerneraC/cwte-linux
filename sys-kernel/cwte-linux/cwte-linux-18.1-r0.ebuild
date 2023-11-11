@@ -31,7 +31,8 @@ pkgbase=linux-cwte-515-starfive-visionfive2
 # cwte_cwt_tagname = cwt${cwte_cwtrel}-${cwte_srcver}-${cwte_cwterev}
 # where:
 # ${PV} = ${cwte_cwtrel}.${cwte_cwterev}
-cwte_cwt_tagname="$(echo ${PV} | sed -n -E "s/([0-9]+)\.([0-9]+)/cwt\1-${cwte_srcver}-\2/p")"
+#cwte_cwt_tagname="$(echo ${PV} | sed -n -E "s/([0-9]+)\.([0-9]+)/cwt\1-${cwte_srcver}-\2/p")"
+cwte_cwt_tagname="cwt18-${cwte_srcver}-1"
 
 DESCRIPTION="Linux 5.15.x (-cwte) for StarFive RISC-V VisionFive 2 Board"
 HOMEPAGE="
