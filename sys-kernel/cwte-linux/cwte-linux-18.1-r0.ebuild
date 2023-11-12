@@ -46,11 +46,11 @@ SRC_URI="
 	https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> 3rdpart_pkg.tar.gz
 "
 
-LICENSE="GPL-2"
+LICENSE="GPL-2 BSD-Chips-and-Media"
 SLOT="0"
 KEYWORDS="-* ~riscv"
 IUSE=""
-LICENSE="BSD-Chips-and-Media"
+
 
 
 # PN="<name of package>"
@@ -58,9 +58,9 @@ LICENSE="BSD-Chips-and-Media"
 # therefore the name of the file is "${P}.ebuild"
 #S="${WORKDIR}/${PN}-${P}"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
+#DEPEND=""
+#RDEPEND="${DEPEND}"
+#BDEPEND=""
 
 S="${WORKDIR}"
 
@@ -288,21 +288,21 @@ cwte_install_headers() {
 	find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
 
 
-	# commented out, as I do not know what the `$STRIP_SHARED` are
-	echo "Stripping build tools..."
-	local file
-	while read -rd '' file; do
-		case "$(file -bi "$file")" in
-		application/x-sharedlib\;*) # Libraries (.so)
-			llvm-strip -v $STRIP_SHARED "$file" ;;
-		application/x-archive\;*) # Libraries (.a)
-			llvm-strip -v $STRIP_STATIC "$file" ;;
-		application/x-executable\;*) # Binaries
-			llvm-strip -v $STRIP_BINARIES "$file" ;;
-		application/x-pie-executable\;*) # Relocatable binaries
-			llvm-strip -v $STRIP_SHARED "$file" ;;
-		esac
-	done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
+	# commented out, as I do not know how to do the striphow to do the stripping compiler independantt are
+	#echo "Stripping build tools..."
+	#local file
+	#while read -rd '' file; do
+	#	case "$(file -bi "$file")" in
+	#	application/x-sharedlib\;*) # Libraries (.so)
+	#		llvm-strip -v $STRIP_SHARED "$file" ;;
+	#	application/x-archive\;*) # Libraries (.a)
+	#		llvm-strip -v $STRIP_STATIC "$file" ;;
+	#	application/x-executable\;*) # Binaries
+	#		llvm-strip -v $STRIP_BINARIES "$file" ;;
+	#	application/x-pie-executable\;*) # Relocatable binaries
+	#		llvm-strip -v $STRIP_SHARED "$file" ;;
+	#	esac
+	#done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
 
 	echo "Adding symlink..."
 	mkdir -p "${D}/usr/src"
