@@ -2,7 +2,7 @@
 
 You can add this Git repository to be available from emerge:
 
-Add this to your `/etc/portage/repos.conf/eselect-repo.conf` file, and then you can select it with `eselect repo`
+Add this as `/etc/portage/repos.conf/cwte-linux-rep.conf`, and then you can update it with `emaint`
 ```
 [cwte-linux-repo]
 location = /var/db/repos/cwte-linux-repo
