@@ -112,7 +112,7 @@ cwte_prepare_kern() {
 	emake "${make_com[@]}" olddefconfig  || die "Failed loading old config $src"
 	cp .config $cwte_dir_tmpfiles/config
 
-	${make_com[@]} -s kernelrelease > $cwte_dir_tmpfiles/version
+	emake "${make_com[@]}" -s kernelrelease > $cwte_dir_tmpfiles/version
 	echo "Prepared kernel version $(<$cwte_dir_tmpfiles/version)"
 }
 
@@ -130,19 +130,19 @@ cwte_prepare_3rdpart() {
 
 cwte_compile() {
 	cd $cwte_srcdir_kern
-	${make_com} all  || die "Failed kernel compile"
+	emake "${make_com[@]}" all  || die "Failed kernel compile"
 
 	# JPU
 	cd $cwte_srcdir_3rdpart/codaj12/jdi/linux/driver
-	${make_com} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
+	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
 
 	# VENC
 	cd $cwte_srcdir_3rdpart/wave420l/code/vdi/linux/driver
-	${make_com} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
+	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
 
 	# VDEC
 	cd $cwte_srcdir_3rdpart/wave511/code/vdi/linux/driver
-	${make_com} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
+	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
 }
 
 
@@ -157,11 +157,11 @@ cwte_install_kern() {
 	install -Dm644 "arch/riscv/boot/Image.gz" "${D}/boot/vmlinuz"
 
 	echo "Installing modules..."
-	${make_com} INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
+	emake "${make_com[@]}" INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
 
 	echo "Installing dtbs..."
-	${make_com} INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
-	${make_com} INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
+	emake "${make_com[@]}" INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
+	emake "${make_com[@]}" INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
 
 	# remove build links
 	rm "$modulesdir"/build
