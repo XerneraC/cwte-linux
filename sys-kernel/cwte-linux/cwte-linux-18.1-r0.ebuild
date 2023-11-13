@@ -77,11 +77,11 @@ cwte_dir_tmpfiles="${T}"
 
 cwte_cc="$(tc-getCC)"
 
-make_com=(emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}")
+make_com=(KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}")
 case $cwte_cc in
 	clang*)
 		# TODO: Check whether the LLVM_IAS option is actually necessary
-		make_com=(${make_com[@]} "LLVM=1" "LLVM_IAS=1");;
+		make_com+=("LLVM=1" "LLVM_IAS=1");;
 	*)
 		;;
 esac
@@ -109,7 +109,7 @@ cwte_prepare_kern() {
 
 	echo "Setting config..."
 	cp $cwte_srcdir_cwt/config .config
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" olddefconfig  || die "Failed loading old config $src"
+	emake "${make_com[@]}" olddefconfig  || die "Failed loading old config $src"
 	cp .config $cwte_dir_tmpfiles/config
 
 	${make_com[@]} -s kernelrelease > $cwte_dir_tmpfiles/version
