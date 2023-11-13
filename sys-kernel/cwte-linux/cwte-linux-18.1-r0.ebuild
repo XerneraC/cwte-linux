@@ -77,11 +77,11 @@ cwte_dir_tmpfiles="${T}"
 
 cwte_cc="$(tc-getCC)"
 
-make_com=(KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}")
+make_opts=(KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}")
 case $cwte_cc in
 	clang*)
 		# TODO: Check whether the LLVM_IAS option is actually necessary
-		make_com+=("LLVM=1" "LLVM_IAS=1");;
+		make_opts+=("LLVM=1" "LLVM_IAS=1");;
 	*)
 		;;
 esac
@@ -109,10 +109,10 @@ cwte_prepare_kern() {
 
 	echo "Setting config..."
 	cp $cwte_srcdir_cwt/config .config
-	emake "${make_com[@]}" olddefconfig  || die "Failed loading old config $src"
+	emake "${make_opts[@]}" olddefconfig  || die "Failed loading old config $src"
 	cp .config $cwte_dir_tmpfiles/config
 
-	emake "${make_com[@]}" -s kernelrelease > $cwte_dir_tmpfiles/version
+	emake "${make_opts[@]}" -s kernelrelease > $cwte_dir_tmpfiles/version
 	echo "Prepared kernel version $(<$cwte_dir_tmpfiles/version)"
 }
 
@@ -130,19 +130,19 @@ cwte_prepare_3rdpart() {
 
 cwte_compile() {
 	cd $cwte_srcdir_kern
-	emake "${make_com[@]}" all  || die "Failed kernel compile"
+	emake "${make_opts[@]}" all  || die "Failed kernel compile"
 
 	# JPU
 	cd $cwte_srcdir_3rdpart/codaj12/jdi/linux/driver
-	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
+	emake "${make_opts[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
 
 	# VENC
 	cd $cwte_srcdir_3rdpart/wave420l/code/vdi/linux/driver
-	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
+	emake "${make_opts[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
 
 	# VDEC
 	cd $cwte_srcdir_3rdpart/wave511/code/vdi/linux/driver
-	emake "${make_com[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
+	emake "${make_opts[@]}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
 }
 
 
@@ -157,11 +157,11 @@ cwte_install_kern() {
 	install -Dm644 "arch/riscv/boot/Image.gz" "${D}/boot/vmlinuz"
 
 	echo "Installing modules..."
-	emake "${make_com[@]}" INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
+	emake "${make_opts[@]}" INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
 
 	echo "Installing dtbs..."
-	emake "${make_com[@]}" INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
-	emake "${make_com[@]}" INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
+	emake "${make_opts[@]}" INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
+	emake "${make_opts[@]}" INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
 
 	# remove build links
 	rm "$modulesdir"/build
