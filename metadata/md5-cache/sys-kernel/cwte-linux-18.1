@@ -1,3 +1,4 @@
+BDEPEND=sys-devel/bc dev-util/pahole dev-lang/perl app-arch/tar
 DEFINED_PHASES=compile install prepare
 DESCRIPTION=Linux 5.15.x (-cwte) for StarFive RISC-V VisionFive 2 Board
 EAPI=8
@@ -5,7 +6,8 @@ HOMEPAGE=https://github.com/starfive-tech/linux https://github.com/cwt-vf2/aur-l
 INHERIT=toolchain-funcs
 KEYWORDS=-* ~riscv
 LICENSE=GPL-2 BSD-Chips-and-Media
+RESTRICT=mirror
 SLOT=0
 SRC_URI=https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/cwt-3.8.2-.tar.gz -> cwt_pkg.tar.gz https://github.com/starfive-tech/linux/archive/refs/tags/VF2_v3.8.2.tar.gz -> kern_pkg.tar.gz https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/VF2_v3.8.2.tar.gz -> 3rdpart_pkg.tar.gz
 _eclasses_=toolchain-funcs	edeef89edaf21d30225d31702ab117ac	multilib	c19072c3cd7ac5cb21de013f7e9832e0
-_md5_=82d6876c011aefed600eeea0cb8052e0
+_md5_=a48172a97231d8566dd599415f96a85e

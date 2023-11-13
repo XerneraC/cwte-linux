@@ -50,7 +50,7 @@ LICENSE="GPL-2 BSD-Chips-and-Media"
 SLOT="0"
 KEYWORDS="-* ~riscv"
 IUSE=""
-
+RESTRICT="mirror"
 
 
 # PN="<name of package>"
@@ -60,7 +60,12 @@ IUSE=""
 
 #DEPEND=""
 #RDEPEND="${DEPEND}"
-#BDEPEND=""
+BDEPEND="
+	sys-devel/bc
+	dev-util/pahole
+	dev-lang/perl
+	app-arch/tar
+"
 
 S="${WORKDIR}"
 
