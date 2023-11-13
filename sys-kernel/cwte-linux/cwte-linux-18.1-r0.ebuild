@@ -69,7 +69,7 @@ BDEPEND="
 
 S="${WORKDIR}"
 
-cwte_srcdir_cwt="${S}/aur-linux-cwt-starfive-vf2-cwt${cwte_cwtrel}-${cwte_srcver}-${cwte_cwtrev}"
+cwte_srcdir_cwt="${S}/aur-linux-cwt-starfive-vf2-${cwte_cwt_tagname}"
 cwte_srcdir_kern="${S}/linux-VF2_v${cwte_srcver}"
 cwte_srcdir_3rdpart="${S}/soft_3rdpart-VF2_v${cwte_srcver}"
 
