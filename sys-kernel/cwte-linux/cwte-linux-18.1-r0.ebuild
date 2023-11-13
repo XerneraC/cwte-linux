@@ -77,16 +77,16 @@ cwte_dir_tmpfiles="${T}"
 
 cwte_cc="$(tc-getCC)"
 
-#  LLVM=$make_opt_llvm LLVM_IAS=$make_opt_llvm
+make_opts=("KCFLAGS=\"-fno-asynchronous-unwind-tables -fno-unwind-tables\"" "CC=$cwte_cc" "CFLAGS=\"${CFLAGS}\"" "LDFLAGS=\"${LDFLAGS}\"")
 case $cwte_cc in
 	clang*)
-		make_opt_llvm=1
 		# TODO: Check whether the LLVM_IAS option is actually necessary
-		;;
+		make_opts=("LLVM=1" "LLVM_IAS=1" $make_opts);;
 	*)
-		make_opt_llvm=0
 		;;
 esac
+
+
 
 cwte_prepare_kern() {
 	cd $cwte_srcdir_kern
@@ -109,10 +109,10 @@ cwte_prepare_kern() {
 
 	echo "Setting config..."
 	cp $cwte_srcdir_cwt/config .config
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" olddefconfig  || die "Failed loading old config $src"
+	emake ${make_opts[@]} olddefconfig  || die "Failed loading old config $src"
 	cp .config $cwte_dir_tmpfiles/config
 
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" -s kernelrelease > $cwte_dir_tmpfiles/version
+	emake ${make_opts[@]} -s kernelrelease > $cwte_dir_tmpfiles/version
 	echo "Prepared kernel version $(<$cwte_dir_tmpfiles/version)"
 }
 
@@ -130,19 +130,19 @@ cwte_prepare_3rdpart() {
 
 cwte_compile() {
 	cd $cwte_srcdir_kern
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" all  || die "Failed kernel compile"
+	emake ${make_opts[@]} all  || die "Failed kernel compile"
 
 	# JPU
 	cd $cwte_srcdir_3rdpart/codaj12/jdi/linux/driver
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
+	emake ${make_opts[@]} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (JPU)"
 
 	# VENC
 	cd $cwte_srcdir_3rdpart/wave420l/code/vdi/linux/driver
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
+	emake ${make_opts[@]} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VENC)"
 
 	# VDEC
 	cd $cwte_srcdir_3rdpart/wave511/code/vdi/linux/driver
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
+	emake ${make_opts[@]} KERNELDIR=$cwte_srcdir_kern || die "Failed 3rdpart compile (VDEC)"
 }
 
 
@@ -157,11 +157,11 @@ cwte_install_kern() {
 	install -Dm644 "arch/riscv/boot/Image.gz" "${D}/boot/vmlinuz"
 
 	echo "Installing modules..."
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
+	emake ${make_opts[@]} INSTALL_MOD_PATH="${D}" INSTALL_MOD_STRIP=1 modules_install || die "Failed make install modules"
 
 	echo "Installing dtbs..."
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
-	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC=$cwte_cc CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
+	emake ${make_opts[@]} INSTALL_DTBS_PATH="${D}/usr/share/dtbs/$kernver" dtbs_install || die "Failed make install dtbs (1)"
+	emake ${make_opts[@]} INSTALL_DTBS_PATH="${D}/boot/dtbs/"              dtbs_install || die "Failed make install dtbs (2)"
 
 	# remove build links
 	rm "$modulesdir"/build
