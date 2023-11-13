@@ -77,7 +77,7 @@ cwte_dir_tmpfiles="${T}"
 
 cwte_cc="$(tc-getCC)"
 
-make_opts=("KCFLAGS=\"-fno-asynchronous-unwind-tables -fno-unwind-tables\"" "CC=$cwte_cc" "CFLAGS=\"${CFLAGS}\"" "LDFLAGS=\"${LDFLAGS}\"")
+make_opts=("KCFLAGS=\"-fno-asynchronous-unwind-tables -fno-unwind-tables\"" "CC=\"$cwte_cc\"" "CFLAGS=\"${CFLAGS}\"" "LDFLAGS=\"${LDFLAGS}\"")
 case $cwte_cc in
 	clang*)
 		# TODO: Check whether the LLVM_IAS option is actually necessary
