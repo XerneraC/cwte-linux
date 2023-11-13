@@ -109,7 +109,7 @@ cwte_prepare_kern() {
 
 	echo "Setting config..."
 	cp $cwte_srcdir_cwt/config .config
-	${make_com} olddefconfig  || die "Failed loading old config $src"
+	emake KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" olddefconfig  || die "Failed loading old config $src"
 	cp .config $cwte_dir_tmpfiles/config
 
 	${make_com} -s kernelrelease > $cwte_dir_tmpfiles/version
