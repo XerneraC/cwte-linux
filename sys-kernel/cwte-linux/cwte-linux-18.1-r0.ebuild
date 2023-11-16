@@ -8,10 +8,6 @@ cwte_kern_variant=cwte
 pkgbase=linux-cwte-515-starfive-visionfive2
 
 
-#cwte_rev=2
-#cwte_cwtrel=18
-#cwte_cwtrev=1
-
 #             /------- cwte_cwtrel
 #             | /----- cwte_cwterev
 #             | |  /-- cwte_rev
@@ -22,15 +18,6 @@ pkgbase=linux-cwte-515-starfive-visionfive2
 #             |------- These 2 values define the ctw version this ebuild is based on
 #             \------- As in 18.1 => cwt18 ${cwte_srcver}-1
 
-#cwte_rev="$(echo ${PR} | sed -n -E 's/r([0-9]+)/\1/p')"
-#cwte_cwtrel="$(echo ${PV} | sed -n -E 's/([0-9]+)\.[0-9]+/\1/p')"
-#cwte_cwtrev="$(echo ${PV} | sed -n -E 's/[0-9]+\.([0-9]+)/\1/p')"
-
-#cwte_rev="$(echo ${PR} | sed -n -E 's/r([0-9]+)/\1/p')"
-
-# cwte_cwt_tagname = cwt${cwte_cwtrel}-${cwte_srcver}-${cwte_cwterev}
-# where:
-# ${PV} = ${cwte_cwtrel}.${cwte_cwterev}
 cwte_cwt_tagname="$(echo $PV | (IFS='.' read -r cwte_cwtrel cwte_cwtrev; echo "cwt${cwte_cwtrel}-${cwte_srcver}-${cwte_cwtrev}"))"
 
 DESCRIPTION="Linux 5.15.x (-cwte) for StarFive RISC-V VisionFive 2 Board"
@@ -39,7 +26,6 @@ HOMEPAGE="
 	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2
 	https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2
 "
-# https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/cwt${cwte_cwtrel}-${cwte_srcver}-${cwte_cwtrev}.tar.gz -> cwt_pkg.tar.gz
 SRC_URI="
 	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/${cwte_cwt_tagname}.tar.gz -> cwt_pkg.tar.gz
 	https://github.com/starfive-tech/linux/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> kern_pkg.tar.gz
@@ -51,12 +37,6 @@ SLOT="0"
 KEYWORDS="-* ~riscv"
 IUSE=""
 RESTRICT="mirror"
-
-
-# PN="<name of package>"
-# P="${PN}-<package version>"
-# therefore the name of the file is "${P}.ebuild"
-#S="${WORKDIR}/${PN}-${P}"
 
 #DEPEND=""
 #RDEPEND="${DEPEND}"
@@ -80,7 +60,6 @@ cwte_cc="$(tc-getCC)"
 make_opts=(KCFLAGS="-fno-asynchronous-unwind-tables -fno-unwind-tables" CC="$cwte_cc" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}")
 case $cwte_cc in
 	clang*)
-		# TODO: Check whether the LLVM_IAS option is actually necessary
 		make_opts+=("LLVM=1" "LLVM_IAS=1");;
 	*)
 		;;
@@ -91,18 +70,18 @@ esac
 cwte_prepare_kern() {
 	cd $cwte_srcdir_kern
 
+	# Removing this patch as it is no longer necessary, but it was left in
+	# the original cwt repo
+	rm -f $cwte_srcdir_cwt/linux-6-fix_qspi_partitions_according_to_datasheet.patch
+
 	local src
 	for src in $(ls $cwte_srcdir_cwt/linux-*.patch); do
 		echo "Applying patch $src to kernel..."
-		#patch -Np1 < "$src" || die "Failed kernel patch $src"
-		patch -Np1 < "$src"
+		patch -Np1 < "$src" || die "Failed kernel patch $src"
 	done
 
 	echo "Setting version..."
 	scripts/setlocalversion --save-scmversion
-	#echo "-${cwte_kern_variant}" > localversion.10-variant
-	#echo "-${cwte_srcver}"       > localversion.20-pkgver
-	#echo "-$cwte_rev"            > localversion.30-pkgrel
 	echo "-${cwte_kern_variant}" > localversion.10-variant
 	echo "-${cwte_srcver}"       > localversion.20-srcver
 	echo "-${PVR}"               > localversion.30-pkgver
@@ -110,6 +89,10 @@ cwte_prepare_kern() {
 	echo "Setting config..."
 	cp $cwte_srcdir_cwt/config .config
 	emake "${make_opts[@]}" olddefconfig  || die "Failed loading old config $src"
+	if [[ $CWTE_CUSTOM_CONFIG = 1 ]]; then
+		emake "${make_opts[@]}" menuconfig    || die "Cannot menuconfig"
+		emake "${make_opts[@]}" olddefconfig  || die "Menuconfig-ed config could not be olddefconfig-ed" # IDK if this is necessary
+	fi
 	cp .config $cwte_dir_tmpfiles/config
 
 	emake "${make_opts[@]}" -s kernelrelease > $cwte_dir_tmpfiles/version
@@ -146,7 +129,6 @@ cwte_compile() {
 }
 
 
-
 cwte_install_kern() {
 	cd $cwte_srcdir_kern
 	local kernver="$(<$cwte_dir_tmpfiles/version)"
@@ -169,7 +151,6 @@ cwte_install_kern() {
 	install -Dm644 $cwte_srcdir_cwt/linux.preset  "${D}/etc/mkinitcpio.d/linux.preset"
 	install -Dm644 $cwte_srcdir_cwt/90-linux.hook "${D}/usr/share/libalpm/hooks/90-linux.hook"
 }
-
 
 
 cwte_install_3rdpart() {
@@ -221,12 +202,6 @@ cwte_install_3rdpart() {
 	install -Dm644 $cwte_srcdir_cwt/91-soft_3rdpart.hook      "${D}/usr/share/libalpm/hooks/91-soft_3rdpart.hook"
 	install -Dm644 $cwte_srcdir_cwt/91-soft_3rdpart.rules     "${D}/etc/udev/rules.d/91-soft_3rdpart.rules"
 }
-
-
-
-
-
-
 
 
 cwte_install_headers() {
@@ -292,23 +267,6 @@ cwte_install_headers() {
 	echo "Removing loose objects..."
 	find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
 
-
-	# commented out, as I do not know how to do the striphow to do the stripping compiler independantt are
-	#echo "Stripping build tools..."
-	#local file
-	#while read -rd '' file; do
-	#	case "$(file -bi "$file")" in
-	#	application/x-sharedlib\;*) # Libraries (.so)
-	#		llvm-strip -v $STRIP_SHARED "$file" ;;
-	#	application/x-archive\;*) # Libraries (.a)
-	#		llvm-strip -v $STRIP_STATIC "$file" ;;
-	#	application/x-executable\;*) # Binaries
-	#		llvm-strip -v $STRIP_BINARIES "$file" ;;
-	#	application/x-pie-executable\;*) # Relocatable binaries
-	#		llvm-strip -v $STRIP_SHARED "$file" ;;
-	#	esac
-	#done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
-
 	echo "Adding symlink..."
 	mkdir -p "${D}/usr/src"
 	ln -sr "$builddir" "${D}/usr/src/$pkgbase"
@@ -334,11 +292,6 @@ src_install() {
 	cwte_install_kern
 	cwte_install_3rdpart
 	cwte_install_headers
-
-	# how to error:
-	# `<command> || die "<error>"`
-
-	# DESTDIR=${D}
 }
 
 
