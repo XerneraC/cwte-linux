@@ -1,10 +1,11 @@
 
-git pull
+
 rm -R metadata/md5-cache
 rm */*/Manifest
 pkgdev manifest
+ebuilds=$(ls */*/*.ebuild)
+for curr_ebuild in $ebuilds; do
+	ebuild $curr_ebuild manifest
+done
 pkgcheck scan
-read
-git add .
-git commit -m "Update Manifest"
-git push
+

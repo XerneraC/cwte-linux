@@ -18,15 +18,21 @@ RESTRICT="mirror"
 local_git_repo="${S}/blah"
 wifi_fw_path="${local_git_repo}/package/starfive/usb_wifi"
 
+infomsg="Even though we pulled an enitre buildroot repo, we only require a small part of it. As the default functions want to compile that buildroot, i need to override them"
+
 src_prepare() {
 	eapply_user
 	ls "${S}"
+	echo $infomsg
 }
 
 src_configure() {
 	ls "${S}"
+	echo $infomsg
 }
-src_compile() {}
+src_compile() {
+	echo $infomsg
+}
 
 src_install() {
 	ls "${S}"
