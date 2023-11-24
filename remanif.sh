@@ -1,7 +1,7 @@
 
 git pull
 rm -R metadata/md5-cache
-rm sys-kernel/cwte-linux/Manifest
+rm */*/Manifest
 pkgdev manifest
 pkgcheck scan
 read
