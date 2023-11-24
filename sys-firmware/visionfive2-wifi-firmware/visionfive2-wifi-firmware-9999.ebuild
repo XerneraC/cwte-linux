@@ -18,6 +18,15 @@ RESTRICT="mirror"
 local_git_repo="${S}/blah"
 wifi_fw_path="${local_git_repo}/package/starfive/usb_wifi"
 
+src_prepare() {
+	eapply_user
+	ls "${S}"
+}
+
+src_configure() {
+	ls "${S}"
+}
+src_compile() {}
 
 src_install() {
 	ls "${S}"
