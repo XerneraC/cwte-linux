@@ -22,7 +22,7 @@ LICENSE=""
 SLOT="0"
 KEYWORDS="-* ~riscv"
 IUSE=""
-RESTRICT="mirror"
+RESTRICT="mirror strip"
 
 #DEPEND=""
 #RDEPEND="${DEPEND}"
