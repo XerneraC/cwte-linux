@@ -10,8 +10,6 @@ EGIT_BRANCH="JH7110_VisionFive2_devel"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-* ~riscv"
-IUSE=""
 RESTRICT="mirror"
 
 wifi_fw_path="${S}/package/starfive/usb_wifi"
