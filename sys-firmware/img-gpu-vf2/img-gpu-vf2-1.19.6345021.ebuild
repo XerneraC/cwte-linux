@@ -100,8 +100,8 @@ src_install() {
 	install -Dm644 lib/firmware/rgx.fw.36.50.54.182 "${D}/lib/firmware/rgx.fw.36.50.54.182"
 	install -Dm644 lib/firmware/rgx.sh.36.50.54.182 "${D}/lib/firmware/rgx.sh.36.50.54.182"
 
-	#######
-	##install -Dm644 $srcdir/img-gpu-firmware-mkinitcpio.conf "${D}/etc/mkinitcpio.conf.d/${pkgname}.conf"
+	# dracut initramfs config
+	install -Dm644 ${FILESDIR}/img-gpu-firmware-dracut.conf "${D}/etc/dracut.conf.d/${PN}.conf"
 }
 
 
