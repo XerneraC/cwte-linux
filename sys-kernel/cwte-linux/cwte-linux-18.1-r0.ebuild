@@ -27,9 +27,9 @@ HOMEPAGE="
 	https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2
 "
 SRC_URI="
-	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/${cwte_cwt_tagname}.tar.gz -> cwt_pkg.tar.gz
-	https://github.com/starfive-tech/linux/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> kern_pkg.tar.gz
-	https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> 3rdpart_pkg.tar.gz
+	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/${cwte_cwt_tagname}.tar.gz -> ${PF}_cwt_pkg.tar.gz
+	https://github.com/starfive-tech/linux/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> ${PF}_kern_pkg.tar.gz
+	https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> ${PF}_3rdpart_pkg.tar.gz
 "
 
 LICENSE="GPL-2 BSD-Chips-and-Media"
