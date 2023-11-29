@@ -49,7 +49,6 @@ BDEPEND="
 
 S="${WORKDIR}"
 
-linux-cwt-starfive-vf2-cwt18-3.8.2-1
 cwte_srcdir_cwt="${S}/linux-cwt-starfive-vf2-${cwte_cwt_tagname}"
 cwte_srcdir_kern="${S}/linux-VF2_v${cwte_srcver}"
 cwte_srcdir_3rdpart="${S}/soft_3rdpart-VF2_v${cwte_srcver}"
