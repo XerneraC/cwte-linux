@@ -27,7 +27,7 @@ HOMEPAGE="
 	https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2
 "
 SRC_URI="
-	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2/archive/refs/tags/${cwte_cwt_tagname}.tar.gz -> ${PF}_cwt_pkg.tar.gz
+	https://github.com/cwt-vf2/linux-cwt-starfive-vf2/archive/refs/tags/${cwte_cwt_tagname}.tar.gz -> ${PF}_cwt_pkg.tar.gz
 	https://github.com/starfive-tech/linux/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> ${PF}_kern_pkg.tar.gz
 	https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/VF2_v${cwte_srcver}.tar.gz -> ${PF}_3rdpart_pkg.tar.gz
 "
@@ -49,7 +49,8 @@ BDEPEND="
 
 S="${WORKDIR}"
 
-cwte_srcdir_cwt="${S}/aur-linux-cwt-starfive-vf2-${cwte_cwt_tagname}"
+linux-cwt-starfive-vf2-cwt18-3.8.2-1
+cwte_srcdir_cwt="${S}/linux-cwt-starfive-vf2-${cwte_cwt_tagname}"
 cwte_srcdir_kern="${S}/linux-VF2_v${cwte_srcver}"
 cwte_srcdir_3rdpart="${S}/soft_3rdpart-VF2_v${cwte_srcver}"
 
