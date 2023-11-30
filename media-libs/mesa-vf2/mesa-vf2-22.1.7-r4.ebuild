@@ -1,6 +1,5 @@
 EAPI=8
 
-inherit toolchain-funcs
 inherit meson
 
 
