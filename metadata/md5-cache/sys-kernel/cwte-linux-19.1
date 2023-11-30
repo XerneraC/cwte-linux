@@ -1,0 +1,13 @@
+BDEPEND=sys-devel/bc dev-util/pahole dev-lang/perl app-arch/tar
+DEFINED_PHASES=compile install prepare
+DESCRIPTION=Linux 5.15.x (-cwte) for StarFive RISC-V VisionFive 2 Board
+EAPI=8
+HOMEPAGE=https://github.com/starfive-tech/linux https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2 https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2
+INHERIT=toolchain-funcs
+KEYWORDS=-* ~riscv
+LICENSE=GPL-2 BSD-Chips-and-Media
+RESTRICT=mirror
+SLOT=0
+SRC_URI=https://github.com/cwt-vf2/linux-cwt-starfive-vf2/archive/refs/tags/cwt19-3.9.3-1.tar.gz -> cwte-linux-19.1-r0_cwt_pkg.tar.gz https://github.com/starfive-tech/linux/archive/refs/tags/JH7110_VF2_515_v3.9.3.tar.gz -> cwte-linux-19.1-r0_kern_pkg.tar.gz https://github.com/starfive-tech/soft_3rdpart/archive/refs/tags/JH7110_VF2_515_v3.9.3.tar.gz -> cwte-linux-19.1-r0_3rdpart_pkg.tar.gz
+_eclasses_=toolchain-funcs	eed10cf5e5a06916e654d31f5a1925cc	multilib	c19072c3cd7ac5cb21de013f7e9832e0
+_md5_=19c65e21a5c465855ed904b62ed6f96d

@@ -1,0 +1,9 @@
+DEFINED_PHASES=install
+DESCRIPTION=This is the GLES and Vulkan implementation provided by StarFive for the IMG_GPU
+EAPI=8
+HOMEPAGE=https://github.com/starfive-tech/soft_3rdpart/tree/JH7110_VisionFive2_devel https://github.com/cwt-vf2/img-gpu-vf2
+KEYWORDS=-* ~riscv
+RESTRICT=mirror strip
+SLOT=0
+SRC_URI=https://github.com/starfive-tech/soft_3rdpart/raw/JH7110_VF2_515_v3.9.3/IMG_GPU/out/img-gpu-powervr-bin-1.19.6345021.tar.gz
+_md5_=1c48ceebfb4e9091819c57d53ea3fdc3
