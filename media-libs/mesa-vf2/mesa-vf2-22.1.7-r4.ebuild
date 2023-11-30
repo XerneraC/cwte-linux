@@ -6,9 +6,7 @@ inherit meson
 
 DESCRIPTION="A mesa port for the Visionfive 2"
 HOMEPAGE="
-	https://github.com/starfive-tech/linux
-	https://github.com/cwt-vf2/aur-linux-cwt-starfive-vf2
-	https://forum.rvspace.org/t/arch-linux-image-for-visionfive-2
+	https://github.com/cwt-vf2/mesa-pvr-vf2
 "
 SRC_URI="
 	https://mesa.freedesktop.org/archive/mesa-${PV}.tar.xz
@@ -20,7 +18,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~riscv"
-IUSE=""
+IUSE="wayland X video_cards_nouveau video_cards_radeonsi video_cards_r300 video_cards_r600 video_cards_amdgpu video_cards_intel"
 RESTRICT="mirror"
 REQUIRED_USE="|| ( wayland X )"
 
@@ -38,6 +36,8 @@ DEPEND="
 "
 
 # TODO: verify these depends
+# TODO: Add wayland dependencies
+# TODO: make dependencies parametric on use flags
 BDEPEND="
 	${DEPEND}
 	app-text/dos2unix
@@ -62,9 +62,6 @@ patch_dir="${S}/mesa-pvr-vf2-${PV}-${PR:1}"
 EMESON_BUILDTYPE=release
 EMESON_SOURCE=$mesa_dir
 
-
-
-IUSE="wayland X video_cards_nouveau video_cards_radeonsi video_cards_r300 video_cards_r600 video_cards_amdgpu video_cards_intel"
 
 src_prepare() {
 	local patch
@@ -125,15 +122,6 @@ src_prepare() {
 	meson_src_configure || die "Failed to meson configure"
 }
 
-
-
-_src_compile() {
-	meson_src_compile || die "Failed to meson compile"
-}
-
-_src_install() {
-	meson_src_install || die "Failed to meson install"
-}
 
 
 
