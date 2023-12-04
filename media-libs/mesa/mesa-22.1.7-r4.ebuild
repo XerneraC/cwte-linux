@@ -124,9 +124,3 @@ src_prepare() {
 
 
 
-src_install() {
-	#meson_src_install || die "Meson Install Failed"
-	#meson_src_install
-	meson_install || die "Meson n'stall"
-	ln -s "${D}/usr/lib/libGLX_mesa.so.0" "${D}/usr/lib/libGLX_indirect.so.0" || die "Failed to link"
-}
