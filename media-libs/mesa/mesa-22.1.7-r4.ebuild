@@ -17,7 +17,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~riscv"
-IUSE="wayland X video_cards_nouveau video_cards_radeonsi video_cards_r300 video_cards_r600 video_cards_amdgpu video_cards_intel"
+IUSE="gles2 wayland X video_cards_nouveau video_cards_radeonsi video_cards_r300 video_cards_r600 video_cards_amdgpu video_cards_intel"
 RESTRICT="mirror"
 REQUIRED_USE="|| ( wayland X )"
 
