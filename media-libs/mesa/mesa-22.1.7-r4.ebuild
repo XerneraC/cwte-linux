@@ -29,13 +29,13 @@ DEPEND="
 	x11-libs/libXdamage
 	x11-libs/libxshmfence
 	sys-libs/libunwind
+	dev-libs/wayland
 	app-arch/zstd
 	dev-libs/expat
 	media-libs/libglvnd
 "
 
 # TODO: verify these depends
-# TODO: Add wayland dependencies
 # TODO: make dependencies parametric on use flags
 BDEPEND="
 	${DEPEND}
@@ -48,6 +48,7 @@ BDEPEND="
 	media-libs/libva
 	dev-libs/elfutils
 	x11-libs/libXrandr
+	dev-libs/wayland-protocols
 	dev-util/meson
 	dev-util/ninja
 	dev-util/glslang
